@@ -32,16 +32,20 @@
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            margin-bottom: 20px;
+            background-color: #cfe2f3;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 6px;
         }
 
         .label-group {
-            display: flex;
-            flex-direction: row;
-            gap: 10px;
             font-size: 1.1rem;
             color: #333;
             margin-bottom: 5px;
+        }
+
+        .label-group span {
+            font-weight: bold;
         }
 
         .item-row input {
@@ -52,12 +56,13 @@
             width: 100%;
             box-sizing: border-box;
             text-align: right;
+            background-color: #cfe2f3;
         }
 
         button {
             padding: 15px 25px;
             font-size: 1.2rem;
-            background-color: #49a2f4;
+            background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 5px;
@@ -69,10 +74,9 @@
         }
 
         button:hover {
-            background-color: #367ab9;
+            background-color: #45a049;
         }
 
-        /* Desktop / tablet view */
         @media (min-width: 600px) {
             .item-row {
                 flex-direction: row;
@@ -81,6 +85,8 @@
             }
 
             .label-group {
+                display: flex;
+                gap: 10px;
                 width: 70%;
                 margin-bottom: 0;
             }
@@ -98,8 +104,7 @@
         {% for item in items %}
             <div class="item-row">
                 <div class="label-group">
-                    <label for="quantity_{{ item.id }}">ID: {{ item.id }}</label>
-                    <span>{{ item.name }}</span>
+                    {{ item.name }} – <span>{{ item.id }}</span>
                 </div>
                 <input type="number" name="quantity_{{ item.id }}" id="quantity_{{ item.id }}" placeholder="Zadajte množstvo">
             </div>
