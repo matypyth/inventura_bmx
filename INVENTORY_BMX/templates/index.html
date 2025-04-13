@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventúra</title>
+</head>
+<body>
+    <h1>Inventúra skladu</h1>
+    <form method="POST">
+        {% for item in items %}
+            <label for="{{ item }}">{{ item }}:</label>
+            <input type="text" name="{{ item }}" id="{{ item }}"><br><br>
+        {% endfor %}
+        <button type="submit">Odoslať inventúru</button>
+    </form>
+</body>
+</html>
