@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import datetime
@@ -114,8 +114,24 @@ ITEMS = [
     {"id": "8CR506", "name": ""}
 ]
 
+CHEMICAL_ITEMS = [
+  {"id": "Vidra", "name": "INCIDIN OXYFOAM S 750ml"},
+  {"id": "Vidra", "name": "DESPREJ 5l"},
+  {"id": "Vidra", "name": "DESPREJ 500 ml"},
+  {"id": "Vidra", "name": "SKINMAN SOFT PROTECT 1l (na dezinkfeciu rúk)"},
+  {"id": "Vidra", "name": "Mitia 1 l"},
+  {"id": "Vidra", "name": "Surfanios Premium 5 l"},
+  {"id": "Vidra", "name": "SILONDA 500ml (krém na ruky)"},
+  {"id": "Infolab", "name": "Dezix 5l (na dezinfeciu rúk)"},
+  {"id": "Vidra", "name": "CHEMISEPT GEL 1l (na dezinkfeciu rúk)"},
+  {"id": "Vidra", "name": "CHEMISEPT GEL 5l (na dezinkfeciu rúk)"},
+  {"id": "St. Nicolaus", "name": "Killvir 5l (na dezinkfeciu rúk)"},
+  {"id": "Vidra", "name": "Bacticid AF 5L /náhrada za Despej"},
+  {"id": "Vidra", "name": "BActicid AF (Vlhké utierky)"},
+  {"id": "Vidra", "name": "Sterisept 1L - náhrada za Oxyfoam"}
+]
+
 def get_spreadsheet():
-    # Definuj cestu k súboru v Render Secrets
     credentials_path = '/etc/secrets/week-inventory-4667af524caa.json'
 
     if not os.path.exists(credentials_path):
@@ -135,40 +151,60 @@ def get_spreadsheet():
     return spreadsheet
 
 
+def create_inventory_sheet(spreadsheet, base_name, data):
+    existing_titles = [ws.title for ws in spreadsheet.worksheets()]
+    max_number = 0
+    for title in existing_titles:
+        if title.startswith(base_name):
+            try:
+                number = int(title.replace(base_name, "").strip("_"))
+                max_number = max(max_number, number)
+            except ValueError:
+                continue
+
+    new_sheet_name = f"{base_name}_{max_number + 1}"
+    sheet = spreadsheet.add_worksheet(title=new_sheet_name, rows=100, cols=3)
+
+    current_date = datetime.datetime.now().strftime("%d.%m.%Y")
+    sheet.update_cell(1, 1, f"Dátum: {current_date}")
+    sheet.append_row(["ID POLOŽKY", "NÁZOV POLOŽKY", "MNOŽSTVO"])
+
+    for row in data:
+        sheet.append_row(row)
+
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
         data = []
         for item in ITEMS:
-            # Získa množstvo pre každú položku
             quantity = request.form.get(f"quantity_{item['id']}", "")
             if quantity:
                 data.append([item['id'], item['name'], quantity])
 
         spreadsheet = get_spreadsheet()
-        existing_titles = [ws.title for ws in spreadsheet.worksheets()]
-        max_number = -1
-        for title in existing_titles:
-            if title.startswith("Inventura"):
-                try:
-                    number = int(title.replace("Inventura", ""))
-                    max_number = max(max_number, number)
-                except ValueError:
-                    continue
-
-        new_sheet_name = f"Inventura{max_number + 1}"
-        sheet = spreadsheet.add_worksheet(title=new_sheet_name, rows=100, cols=3)
-
-        current_date = datetime.datetime.now().strftime("%d.%m.%Y")
-        sheet.update_cell(1, 1, f"Dátum: {current_date}")
-        sheet.append_row(["ID POLOŽKY", "NÁZOV POLOŽKY", "MNOŽSTVO"])
-        
-        for row in data:
-            sheet.append_row(row)
+        create_inventory_sheet(spreadsheet, "Inventura", data)
 
         return redirect("/")
 
-    return render_template("index.html", items=ITEMS)
+    return render_template("index.html", items=ITEMS, page="main")
+
+
+@app.route("/dezinfekcia", methods=["GET", "POST"])
+def dezinfekcia():
+    if request.method == "POST":
+        data = []
+        for item in CHEMICAL_ITEMS:
+            quantity = request.form.get(f"quantity_{item['id']}", "")
+            if quantity:
+                data.append([item['id'], item['name'], quantity])
+
+        spreadsheet = get_spreadsheet()
+        create_inventory_sheet(spreadsheet, "Inventura_dezinfekcia", data)
+
+        return redirect("/dezinfekcia")
+
+    return render_template("index.html", items=CHEMICAL_ITEMS, page="dezinfekcia")
 
 
 if __name__ == "__main__":
