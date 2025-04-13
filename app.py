@@ -11,10 +11,17 @@ ITEM_NAMES = [f"item_{i}" for i in range(21)]  # 0 - 20
 
 def get_spreadsheet():
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    credentials_path = os.environ.get("week-inventory-4667af524caa.json")
+    credentials_path = "/opt/render/project/src/.render/secrets/week-inventory-4667af524caa.json"
     creds = ServiceAccountCredentials.from_json_keyfile_name(credentials_path, scope)
     client = gspread.authorize(creds)
 
+    try:
+        creds = ServiceAccountCredentials.from_json_keyfile_name(credentials_path, scope)
+    except exceptions.DefaultCredentialsError as e:
+        print(f"Error loading credentials: {e}")
+        raise
+
+    client = gspread.authorize(creds)
     try:
         spreadsheet = client.open("Inventura2025")
     except gspread.exceptions.SpreadsheetNotFound:
