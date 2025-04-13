@@ -10,18 +10,22 @@ ITEM_NAMES = [f"item_{i}" for i in range(21)]  # 0 - 20
 
 
 def get_spreadsheet():
+    # Definuj cestu k súboru v Render Secrets
+    credentials_path = '/etc/secrets/week-inventory-4667af524caa.json'
+
+    # Skontroluj, či súbor existuje na správnom mieste
+    if not os.path.exists(credentials_path):
+        raise FileNotFoundError(f"Súbor s credentials neexistuje na ceste {credentials_path}")
+
+    # Definuj rozsah oprávnení
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    credentials_path = "/opt/render/project/src/.render/secrets/week-inventory-4667af524caa.json"
+
+    # Načítanie credentials zo súboru
     creds = ServiceAccountCredentials.from_json_keyfile_name(credentials_path, scope)
-    client = gspread.authorize(creds)
 
-    try:
-        creds = ServiceAccountCredentials.from_json_keyfile_name(credentials_path, scope)
-    except exceptions.DefaultCredentialsError as e:
-        print(f"Error loading credentials: {e}")
-        raise
-
+    # Autorizácia a prístup do spreadsheetu
     client = gspread.authorize(creds)
+    
     try:
         spreadsheet = client.open("Inventura2025")
     except gspread.exceptions.SpreadsheetNotFound:
