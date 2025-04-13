@@ -2,16 +2,21 @@
 <html lang="sk">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventúra</title>
 </head>
 <body>
-    <h1>Inventúra skladu</h1>
+    <h1>Inventúra 2025</h1>
+
     <form method="POST">
-        {% for item in items %}
-            <label for="{{ item }}">{{ item }}:</label>
-            <input type="text" name="{{ item }}" id="{{ item }}"><br><br>
-        {% endfor %}
-        <button type="submit">Odoslať inventúru</button>
+        <div>
+            <h2>Zadajte množstvo pre položky</h2>
+            {% for item in items %}
+                <label for="quantity_{{ item.id }}">ID: {{ item.id }} - Názov: {{ item.name }}:</label>
+                <input type="number" name="quantity_{{ item.id }}" id="quantity_{{ item.id }}" placeholder="Zadajte množstvo" required><br>
+            {% endfor %}
+        </div>
+        <button type="submit">Aktualizovať inventúru</button>
     </form>
 </body>
 </html>
