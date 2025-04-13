@@ -44,10 +44,6 @@
             margin-bottom: 5px;
         }
 
-        .label-group span {
-            font-weight: bold;
-        }
-
         .item-row input {
             font-size: 1rem;
             padding: 10px;
@@ -56,7 +52,7 @@
             width: 100%;
             box-sizing: border-box;
             text-align: right;
-            background-color: #cfe2f3;
+            background-color: #fff; /* Biele pole pre množstvo */
         }
 
         button {
@@ -85,8 +81,6 @@
             }
 
             .label-group {
-                display: flex;
-                gap: 10px;
                 width: 70%;
                 margin-bottom: 0;
             }
@@ -104,7 +98,7 @@
         {% for item in items %}
             <div class="item-row">
                 <div class="label-group">
-                    {{ item.name }} – <span>{{ item.id }}</span>
+                    {{ item.id }} – {{ item.name }}
                 </div>
                 <input type="number" name="quantity_{{ item.id }}" id="quantity_{{ item.id }}" placeholder="Zadajte množstvo">
             </div>
