@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import datetime
+import os
 
 app = Flask(__name__)
 
@@ -10,7 +11,8 @@ ITEM_NAMES = [f"item_{i}" for i in range(21)]  # 0 - 20
 
 def get_spreadsheet():
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_name("week-inventory-4667af524caa.json", scope)
+    credentials_path = os.environ.get("week-inventory-4667af524caa.json")
+    creds = ServiceAccountCredentials.from_json_keyfile_name(credentials_path, scope)
     client = gspread.authorize(creds)
 
     try:
