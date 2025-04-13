@@ -76,6 +76,22 @@
         button:hover {
             background-color: #0061b9;
         }
+    /* Responsive úpravy pre mobilné zariadenia */
+        @media (min-width: 600px) {
+            .item-row {
+                flex-direction: row;
+                align-items: center;
+            }
+
+            .label-group {
+                width: 70%;
+                margin-bottom: 0;
+            }
+
+            .item-row input {
+                width: 30%;
+            }
+        }
     </style>
 </head>
 <body>
