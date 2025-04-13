@@ -4,7 +4,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import datetime
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="INVENTORY_BMX/templates")
 
 ITEM_NAMES = [f"item_{i}" for i in range(21)]  # 0 - 20
 
