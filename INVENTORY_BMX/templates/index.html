@@ -128,7 +128,7 @@
         {% for item in items %}
             <div class="item-row">
                 <div class="label-group">
-                    {{ item.id }} – {{ item.name }}
+                    <strong>{{ item.id }}</strong> – {{ item.name }}
                 </div>
                 <input type="number" name="quantity_{{ item.id }}" id="quantity_{{ item.id }}" placeholder="Zadajte množstvo">
             </div>
