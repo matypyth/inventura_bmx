@@ -4,18 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventúra</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        form {
+            width: 80%;
+            max-width: 800px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;  /* 3 stĺpce: ID, Názov a Množstvo */
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .grid-container label {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .grid-container input {
+            font-size: 1rem;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 15px 25px;
+            font-size: 1.2rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 200px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
     <h1>Inventúra 2025</h1>
 
     <form method="POST">
-        <div>
-            <h2>Zadajte množstvo pre položky</h2>
+        <div class="grid-container">
+            <!-- Zobrazenie položiek s ID, Názvom a políčkom na zadanie Množstva -->
             {% for item in items %}
-                <label for="quantity_{{ item.id }}">ID: {{ item.id }} - Názov: {{ item.name }}:</label>
-                <input type="number" name="quantity_{{ item.id }}" id="quantity_{{ item.id }}" placeholder="Zadajte množstvo" required><br>
+                <label for="quantity_{{ item.id }}">ID: {{ item.id }} - {{ item.name }}:</label>
+                <input type="number" name="quantity_{{ item.id }}" id="quantity_{{ item.id }}" placeholder="Zadajte množstvo" required>
             {% endfor %}
         </div>
+        
         <button type="submit">Aktualizovať inventúru</button>
     </form>
 </body>
