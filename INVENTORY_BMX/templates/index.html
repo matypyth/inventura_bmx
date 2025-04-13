@@ -58,7 +58,7 @@
         button {
             padding: 15px 25px;
             font-size: 1.2rem;
-            background-color: #329bf9;
+            background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 5px;
@@ -70,9 +70,26 @@
         }
 
         button:hover {
-            background-color: #2578c2;
+            background-color: #45a049;
         }
 
+        /* Tlačidlá na prepínanie medzi inventúrami */
+        .nav-button {
+            background-color: #2d8cf0;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .nav-button:hover {
+            background-color: #1e6bc8;
+        }
+
+        /* Reakcia na širšie obrazovky */
         @media (min-width: 600px) {
             .item-row {
                 flex-direction: row;
@@ -94,11 +111,24 @@
 <body>
     <h1>Inventúra 2025</h1>
 
+    <!-- Navigačné tlačidlá -->
+    <div class="navigation">
+        {% if page == "main" %}
+            <a href="{{ url_for('dezinfekcia') }}">
+                <button class="nav-button">Prejsť na dezinfekciu</button>
+            </a>
+        {% elif page == "dezinfekcia" %}
+            <a href="{{ url_for('index') }}">
+                <button class="nav-button">Späť na hlavnú inventúru</button>
+            </a>
+        {% endif %}
+    </div>
+
     <form method="POST">
         {% for item in items %}
             <div class="item-row">
                 <div class="label-group">
-                    <strong>{{ item.id }}</strong> – {{ item.name }}
+                    {{ item.id }} – {{ item.name }}
                 </div>
                 <input type="number" name="quantity_{{ item.id }}" id="quantity_{{ item.id }}" placeholder="Zadajte množstvo">
             </div>
