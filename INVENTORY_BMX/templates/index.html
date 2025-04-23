@@ -126,13 +126,15 @@
 
     <form method="POST">
         {% for item in items %}
+            {% set input_id = item.id if item.id else item.name.replace(" ", "_") %}
             <div class="item-row">
                 <div class="label-group">
-                    <strong>{{ item.id }}</strong> – {{ item.name }}
+                    {{ item.name }}
                 </div>
-                <input type="number" name="quantity_{{ item.id }}" id="quantity_{{ item.id }}" placeholder="Zadajte množstvo">
+                <input type="number" name="quantity_{{ input_id }}" id="quantity_{{ input_id }}" placeholder="Zadajte množstvo">
             </div>
         {% endfor %}
+
 
         <button type="submit">Aktualizovať inventúru</button>
     </form>
