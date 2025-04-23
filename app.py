@@ -178,9 +178,13 @@ def index():
     if request.method == "POST":
         data = []
         for item in ITEMS:
-            quantity = request.form.get(f"quantity_{item['id']}", "")
-            if quantity:
-                data.append([item['id'], item['name'], quantity])
+            raw_quantity = request.form.get(f"quantity_{item['id']}", "").replace(",", ".")
+            try:
+                quantity = float(raw_quantity)
+                if quantity > 0:
+                    data.append([item['id'], item['name'], quantity])
+            except ValueError:
+                continue  # ignoruj neplatné vstupy
 
         spreadsheet = get_spreadsheet()
         create_inventory_sheet(spreadsheet, "Inventura", data)
@@ -195,9 +199,13 @@ def dezinfekcia():
     if request.method == "POST":
         data = []
         for item in CHEMICAL_ITEMS:
-            quantity = request.form.get(f"quantity_{item['id']}", "")
-            if quantity:
-                data.append([item['id'], item['name'], quantity])
+            raw_quantity = request.form.get(f"quantity_{item['id']}", "").replace(",", ".")
+            try:
+                quantity = float(raw_quantity)
+                if quantity > 0:
+                    data.append([item['id'], item['name'], quantity])
+            except ValueError:
+                continue
 
         spreadsheet = get_spreadsheet()
         create_inventory_sheet(spreadsheet, "Inventura_dezinfekcia", data)
