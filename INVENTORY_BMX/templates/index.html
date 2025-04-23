@@ -123,7 +123,12 @@
             </a>
         {% endif %}
     </div>
-
+<form method="POST">
+    <!-- Hlavička -->
+    <div class="item-row" style="font-weight: bold; background-color: transparent;">
+        <div class="label-group">Popis položky</div>
+        <div style="width: 30%; text-align: right;">Množstvo (QTY)</div>
+    </div>
     {% for item in items %}
         {% set input_id = item.name.replace(" ", "_").replace(",", "").replace(".", "").lower() %}
         <div class="item-row">
