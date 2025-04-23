@@ -181,10 +181,9 @@ def index():
             raw_quantity = request.form.get(f"quantity_{item['id']}", "").replace(",", ".")
             try:
                 quantity = float(raw_quantity)
-                if quantity > 0:
-                    data.append([item['id'], item['name'], quantity])
+                data.append([item['id'], item['name'], quantity])
             except ValueError:
-                continue  # ignoruj neplatné vstupy
+                data.append([item['id'], item['name'], ""])  # ignoruj neplatné vstupy
 
         spreadsheet = get_spreadsheet()
         create_inventory_sheet(spreadsheet, "Inventura", data)
@@ -202,10 +201,9 @@ def dezinfekcia():
             raw_quantity = request.form.get(f"quantity_{item['id']}", "").replace(",", ".")
             try:
                 quantity = float(raw_quantity)
-                if quantity > 0:
-                    data.append([item['id'], item['name'], quantity])
+                data.append([item['id'], item['name'], quantity])
             except ValueError:
-                continue
+                data.append([item['id'], item['name'], ""])
 
         spreadsheet = get_spreadsheet()
         create_inventory_sheet(spreadsheet, "Inventura_dezinfekcia", data)
