@@ -167,15 +167,14 @@ def create_inventory_sheet(spreadsheet, base_name, data):
 
     current_date = datetime.datetime.now().strftime("%d.%m.%Y")
     
-    # Update first cell with date
-    sheet.update("A1", f"Dátum: {current_date}")
+    # Zápis dátumu do A1 – POZOR: dvojrozmerné pole
+    sheet.update("A1", [[f"Dátum: {current_date}"]])
     
-    # Header row
+    # Hlavička + dáta
     header = [["ID POLOŽKY", "NÁZOV POLOŽKY", "MNOŽSTVO"]]
-    # Combine header and data into one list
     all_data = header + data
 
-    # Write all rows at once
+    # Zápis všetkých dát naraz
     sheet.append_rows(all_data, value_input_option="USER_ENTERED")
 
 
@@ -184,7 +183,8 @@ def index():
     if request.method == "POST":
         data = []
         for item in ITEMS:
-            raw_quantity = request.form.get(f"quantity_{item['id']}", "").replace(",", ".")
+            input_id = item['id'] if item['id'] else item['name'].replace(" ", "_")
+            raw_quantity = request.form.get(f"quantity_{input_id}", "").replace(",", ".")
             try:
                 quantity = float(raw_quantity)
                 data.append([item['id'], item['name'], quantity])
@@ -204,7 +204,8 @@ def dezinfekcia():
     if request.method == "POST":
         data = []
         for item in CHEMICAL_ITEMS:
-            raw_quantity = request.form.get(f"quantity_{item['id']}", "").replace(",", ".")
+            input_id = item['id'] if item['id'] else item['name'].replace(" ", "_")
+            raw_quantity = request.form.get(f"quantity_{input_id}", "").replace(",", ".")
             try:
                 quantity = float(raw_quantity)
                 data.append([item['id'], item['name'], quantity])
