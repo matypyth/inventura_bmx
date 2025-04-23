@@ -166,11 +166,17 @@ def create_inventory_sheet(spreadsheet, base_name, data):
     sheet = spreadsheet.add_worksheet(title=new_sheet_name, rows=100, cols=3)
 
     current_date = datetime.datetime.now().strftime("%d.%m.%Y")
-    sheet.update_cell(1, 1, f"Dátum: {current_date}")
-    sheet.append_row(["ID POLOŽKY", "NÁZOV POLOŽKY", "MNOŽSTVO"])
+    
+    # Update first cell with date
+    sheet.update("A1", f"Dátum: {current_date}")
+    
+    # Header row
+    header = [["ID POLOŽKY", "NÁZOV POLOŽKY", "MNOŽSTVO"]]
+    # Combine header and data into one list
+    all_data = header + data
 
-    for row in data:
-        sheet.append_row(row)
+    # Write all rows at once
+    sheet.append_rows(all_data, value_input_option="USER_ENTERED")
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -214,5 +220,5 @@ def dezinfekcia():
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 10000))
     app.run(debug=False, host="0.0.0.0", port=port)
