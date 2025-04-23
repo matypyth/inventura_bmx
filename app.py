@@ -183,13 +183,13 @@ def index():
     if request.method == "POST":
         data = []
         for item in ITEMS:
-            input_id = item['id'] if item['id'] else item['name'].replace(" ", "_")
+            input_id = item['name'].replace(" ", "_").replace(",", "").replace(".", "").lower()
             raw_quantity = request.form.get(f"quantity_{input_id}", "").replace(",", ".")
             try:
                 quantity = float(raw_quantity)
-                data.append([item['id'], item['name'], quantity])
+                data.append([item.get('id', ''), item['name'], quantity])
             except ValueError:
-                data.append([item['id'], item['name'], ""])  # ignoruj neplatné vstupy
+                data.append([item.get('id', ''), item['name'], ""])  # prázdne ak neplatné
 
         spreadsheet = get_spreadsheet()
         create_inventory_sheet(spreadsheet, "Inventura", data)
@@ -204,13 +204,13 @@ def dezinfekcia():
     if request.method == "POST":
         data = []
         for item in CHEMICAL_ITEMS:
-            input_id = item['id'] if item['id'] else item['name'].replace(" ", "_")
+            input_id = item['name'].replace(" ", "_").replace(",", "").replace(".", "").lower()
             raw_quantity = request.form.get(f"quantity_{input_id}", "").replace(",", ".")
             try:
                 quantity = float(raw_quantity)
-                data.append([item['id'], item['name'], quantity])
+                data.append([item.get('id', ''), item['name'], quantity])
             except ValueError:
-                data.append([item['id'], item['name'], ""])
+                data.append([item.get('id', ''), item['name'], ""])
 
         spreadsheet = get_spreadsheet()
         create_inventory_sheet(spreadsheet, "Inventura_dezinfekcia", data)
