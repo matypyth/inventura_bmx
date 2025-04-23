@@ -129,7 +129,7 @@
             {% set input_id = item.id if item.id else item.name.replace(" ", "_") %}
             <div class="item-row">
                 <div class="label-group">
-                    {{ item.name }}
+                    <strong>{{ item.id }}</strong> – {{ item.name }}
                 </div>
                 <input type="number" name="quantity_{{ input_id }}" id="quantity_{{ input_id }}" placeholder="Zadajte množstvo" step="any">
             </div>
